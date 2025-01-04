@@ -1,0 +1,48 @@
+[
+{
+    "action": "create_account",
+    "data": {
+        "username": "admin",
+        "password": "admin"
+    }
+},
+{
+    "result": 100,
+    "message": "Login successfully"
+},
+{
+    "result": 101,
+    "message": "Invalid username or password"
+},
+{
+    "action": "login",
+    "data": {
+        "username": "admin",
+        "password": "admin",
+        "downloadingPort"
+    }
+},
+{
+    "result": 200,
+    "message": "Login successfully"
+},
+{
+    "result": 201,
+    "message": "Login successfully"
+},
+{
+    "action": "create_account",
+    "data": {
+        "username": "admin",
+        "password": "admin"
+    }
+},
+{
+    "result": 100,
+    "message": "Login successfully"
+},
+{
+    "result": 101,
+    "message": "Invalid username or password"
+}
+]

@@ -1,0 +1,69 @@
+version: '3'
+services:
+    odoo:
+        image: rogerdz/odoo:python-3.12
+        networks:
+            - chatbot-network
+        init: true
+        ports:
+            - 8074:8069
+            - 5683:5678
+        volumes:
+            - ${PWD}/../odoo-src:/odoo
+            - ./odoo/entrypoint.sh:/entrypoint.sh
+            - ./odoo/data/.local:/home/odoo/.local
+            - ./odoo/data/.cache:/home/odoo/.cache
+            - odoo-chatbot:/var/lib/odoo
+        environment:
+            - UID=${UID}
+            - GID=${GID}
+            - DEV_FEATURES=all
+            - DEBUGPY_ENABLE=1
+        restart: unless-stopped
+        depends_on:
+            - postgres
+
+    chat-be:
+        build: 
+          context: ./chat-be
+          dockerfile: Dockerfile 
+        networks:
+            - chatbot-network
+        ports:
+            - 8075:8000
+        volumes:
+            - ${PWD}/../chat-be-src:/app
+        environment:
+            - UID=${UID}
+            - GID=${GID}
+        restart: unless-stopped
+
+    postgres:
+        image: postgres:12
+        environment:
+            - POSTGRES_DB=postgres
+            - POSTGRES_PASSWORD=odoo123
+            - POSTGRES_USER=odoo
+        networks:
+            - chatbot-network
+        volumes:
+            - chatbot-postgres-db:/var/lib/postgresql/data
+        restart: unless-stopped
+
+    adminer:
+        image: adminer
+        networks:
+            - chatbot-network
+        ports:
+            - 9095:8080
+    
+    # Ollama : Run LLM
+    # Qdrants : Search vector
+
+networks:
+    chatbot-network:
+        driver: bridge
+
+volumes:
+    chatbot-postgres-db:
+    odoo-chatbot:
